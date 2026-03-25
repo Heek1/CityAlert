@@ -1,31 +1,149 @@
+:root {
+    --ca-white: #ffffff;
+    --ca-blue: #0057b8;
+    --ca-red: #d32f2f;
+    --ca-gradient: linear-gradient(135deg, var(--ca-white) 0%, var(--ca-blue) 50%, var(--ca-red) 100%);
+    --ca-gradient-soft: linear-gradient(135deg, #f0f4ff 0%, #dce8ff 50%, #ffe0e0 100%);
+    --ca-text-dark: #1a1a2e;
+    --ca-grey: #4a4a5a;
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    background: var(--ca-gradient-soft);
+    min-height: 100vh;
+    color: var(--ca-text-dark);
+}
+
+/* Navbar */
+.navbar-ca {
+    background: linear-gradient(90deg, var(--ca-white) 0%, var(--ca-blue) 100%);
+    box-shadow: 0 2px 12px rgba(0, 87, 184, 0.15);
+}
+
+    .navbar-ca .navbar-brand {
+        color: var(--ca-grey);
+        font-weight: 700;
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+    }
+
+        .navbar-ca .navbar-brand:hover {
+            color: var(--ca-blue);
+        }
+
+    .navbar-ca .nav-link {
+        color: var(--ca-grey) !important;
+        font-weight: 500;
+        transition: color 0.2s, border-bottom 0.2s;
+        padding-bottom: 6px;
+        border-bottom: 2px solid transparent;
+    }
+
+        .navbar-ca .nav-link:hover,
+        .navbar-ca .nav-link.active {
+            color: var(--ca-blue) !important;
+            border-bottom: 2px solid var(--ca-red);
+        }
+
+    .navbar-ca .navbar-toggler {
+        border-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-ca .navbar-toggler-icon {
+        filter: none;
+    }
+
+    /* Right-side nav (on the blue part) stays white */
+    .navbar-ca .navbar-nav.ms-auto .nav-link {
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+        .navbar-ca .navbar-nav.ms-auto .nav-link:hover {
+            color: var(--ca-white) !important;
+        }
+
+    /* Auth badge in navbar */
+    .navbar-ca .nav-user {
+        color: var(--ca-white);
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+/* Cards */
+.card-ca {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 87, 184, 0.08);
+    background: var(--ca-white);
+}
+
+    .card-ca .card-header {
+        background: linear-gradient(90deg, var(--ca-blue), var(--ca-red));
+        color: var(--ca-white);
+        border-radius: 12px 12px 0 0;
+        font-weight: 600;
+    }
+
+/* Buttons */
+.btn-ca-primary {
+    background: var(--ca-blue);
+    color: var(--ca-white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.2s, transform 0.1s;
+}
+
+    .btn-ca-primary:hover {
+        background: #004494;
+        color: var(--ca-white);
+        transform: translateY(-1px);
+    }
+
+.btn-ca-danger {
+    background: var(--ca-red);
+    color: var(--ca-white);
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background 0.2s, transform 0.1s;
+}
+
+    .btn-ca-danger:hover {
+        background: #b71c1c;
+        color: var(--ca-white);
+        transform: translateY(-1px);
+    }
+
+.page-header-ca {
+    background: var(--ca-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--ca-blue);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+    color: var(--bs-secondary-color);
+    text-align: end;
 }
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    text-align: start;
 }

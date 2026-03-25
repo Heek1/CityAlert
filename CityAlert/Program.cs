@@ -23,10 +23,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
-    .AddCookie(options =>
-    {
-        options.AccessDeniedPath = "/Home/AccessDenied";
-    })
+    .AddCookie()
     .AddOpenIdConnect(options =>
     {
         options.Authority = builder.Configuration["OpenIdConnect:Authority"];
@@ -39,6 +36,7 @@ builder.Services.AddAuthentication(options =>
         options.Scope.Add("email");
         options.RequireHttpsMetadata = false;
         options.GetClaimsFromUserInfoEndpoint = true;
+        options.PushedAuthorizationBehavior = PushedAuthorizationBehavior.Disable;
 
         options.TokenValidationParameters = new TokenValidationParameters
         {

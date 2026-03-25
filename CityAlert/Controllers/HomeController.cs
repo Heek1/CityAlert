@@ -1,4 +1,5 @@
 using CityAlert.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -10,13 +11,18 @@ namespace CityAlert.Controllers
         public IActionResult Index() => View();
         public IActionResult EventMap() => View();
 
-        [Authorize(Roles = "Resident")]
+        public IActionResult Login()
+        {
+            return Challenge(new AuthenticationProperties { RedirectUri = "/" });
+        }
+
+        [Authorize(Roles = "resident")]
         public IActionResult MySubscriptions() => View();
 
-        [Authorize(Roles = "Moderator")]
+        [Authorize(Roles = "moderator")]
         public IActionResult CreateEvents() => View();
 
-        [Authorize(Roles = "Moderator")]
+        [Authorize(Roles = "moderator")]
         public IActionResult AdminPanel() => View();
 
         public IActionResult Logout() => SignOut("Cookies", "OpenIdConnect");
