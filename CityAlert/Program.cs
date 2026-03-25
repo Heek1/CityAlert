@@ -28,8 +28,8 @@ builder.Services.AddAuthentication(options =>
     .AddOpenIdConnect(options =>
     {
         options.Authority = "http://localhost:8080/realms/city-alert";
-        options.ClientId = "city-alert";
-        options.ClientSecret = "7m6dRIKxhalQyvxPAshe1saNuuwBWJlc";
+        options.ClientId = "cityalert-web";
+        options.ClientSecret = "m6rmF6izAq7onWrIZ0vICUXuFhLj3uuY";
         options.ResponseType = "code";
         options.SaveTokens = true;
         options.Scope.Add("openid");
