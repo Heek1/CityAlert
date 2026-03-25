@@ -7,6 +7,8 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<CityAlertDbContext>(options => options.UseSqlite("Data Source=cityalert.db"));
@@ -27,9 +29,9 @@ builder.Services.AddAuthentication(options =>
     })
     .AddOpenIdConnect(options =>
     {
-        options.Authority = "http://localhost:8080/realms/city-alert";
-        options.ClientId = "city-alert";
-        options.ClientSecret = "7m6dRIKxhalQyvxPAshe1saNuuwBWJlc";
+        options.Authority = builder.Configuration["OpenIdConnect:Authority"];
+        options.ClientId = builder.Configuration["OpenIdConnect:ClientId"];
+        options.ClientSecret = builder.Configuration["OpenIdConnect:ClientSecret"];
         options.ResponseType = "code";
         options.SaveTokens = true;
         options.Scope.Add("openid");
