@@ -1,0 +1,98 @@
+@model CityAlert.Models.Event
+@using CityAlert.Models
+@{
+    ViewData["Title"] = "Створення події";
+
+    var startValue = Model?.StartDate != default
+        ? Model.StartDate.ToString("yyyy-MM-ddTHH:mm")
+        : "";
+
+    var endValue = Model?.EndDate != default
+        ? Model.EndDate.ToString("yyyy-MM-ddTHH:mm")
+        : "";
+}
+
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="page-header-ca">Створення нової події</h1>
+            <p class="page-subtitle">
+                Заповни основні дані події, вибери район, категорію та рівень важливості, після чого повідомлення з’явиться у стрічці.
+            </p>
+        </div>
+        <div class="col-lg-4">
+            <div class="quick-links justify-content-lg-end">
+                <a asp-controller="Events" asp-action="Index" class="btn btn-ca-light">До списку подій</a>
+                <a asp-controller="Home" asp-action="AdminPanel" class="btn btn-ca-outline">Адмін панель</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-shell">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-4 border-0 mb-4"></div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <label asp-for="Title" class="form-label">Назва події</label>
+                <input asp-for="Title" class="form-control" placeholder="Введіть назву події" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+
+            <div class="col-lg-3">
+                <label asp-for="Category" class="form-label">Категорія</label>
+                <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<EventCategory>()"></select>
+                <span asp-validation-for="Category" class="text-danger small"></span>
+            </div>
+
+            <div class="col-lg-3">
+                <label asp-for="Severity" class="form-label">Важливість</label>
+                <select asp-for="Severity" class="form-select" asp-items="Html.GetEnumSelectList<SeverityLevel>()"></select>
+                <span asp-validation-for="Severity" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Description" class="form-label">Опис</label>
+                <textarea asp-for="Description" class="form-control" rows="5" placeholder="Коротко опишіть подію"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="DistrictId" class="form-label">Район</label>
+                <select asp-for="DistrictId" class="form-select" asp-items="ViewBag.Districts">
+                    <option value="">Оберіть район</option>
+                </select>
+                <span asp-validation-for="DistrictId" class="text-danger small"></span>
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="StartDate" class="form-label">Дата початку</label>
+                <input asp-for="StartDate" class="form-control" type="datetime-local" value="@startValue" />
+                <span asp-validation-for="StartDate" class="text-danger small"></span>
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="EndDate" class="form-label">Дата завершення</label>
+                <input asp-for="EndDate" class="form-control" type="datetime-local" value="@endValue" />
+                <span asp-validation-for="EndDate" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label asp-for="IsActive" class="form-check-label">Одразу зробити подію активною</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links mt-4">
+            <button type="submit" class="btn btn-ca-primary">Зберегти подію</button>
+            <a asp-controller="Events" asp-action="Index" class="btn btn-ca-light">Скасувати</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
