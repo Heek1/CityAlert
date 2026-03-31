@@ -1,91 +1,106 @@
 ﻿@model IEnumerable<CityAlert.Models.Event>
 @{
-    ViewData["Title"] = "Стрічка подій";
-    var criticalEvents = Model.Where(e => e.Severity == CityAlert.Models.SeverityLevel.Critical);
-    var otherEvents = Model.Where(e => e.Severity != CityAlert.Models.SeverityLevel.Critical);
+ViewData["Title"] = "Події";
+var criticalEvents = Model.Where(e => e.Severity == CityAlert.Models.SeverityLevel.Critical).ToList();
+var normalEvents = Model.Where(e => e.Severity != CityAlert.Models.SeverityLevel.Critical).ToList();
 }
 
-<div class="container mt-4">
-    <h1 class="page-header-ca mb-4">Актуальні події міста</h1>
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+<div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">@successMessage</div>
+}
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info card-ca">
-            Наразі немає активних подій.
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="page-header-ca">Стрічка подій міста</h1>
+            <p class="page-subtitle">
+                Перегляд усіх активних міських подій з розподілом за важливістю, районом та категорією.
+            </p>
         </div>
-    }
-    else
-    {
-        @if (criticalEvents.Any())
-        {
-            <div class="critical-section mb-5">
-                <h4 class="text-danger fw-bold mb-3"> ТЕРМІНОВІ ПОВІДОМЛЕННЯ</h4>
-                <div class="row">
-                    @foreach (var ev in criticalEvents)
-                    {
-                        <div class="col-12 mb-3">
-                            <div class="card card-ca border-danger shadow-sm" style="border-left: 5px solid var(--ca-red) !important;">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <h5 class="card-title text-danger fw-bold">@ev.Title</h5>
-                                        <span class="badge bg-danger">Критично</span>
-                                    </div>
-                                    <p class="card-text">@ev.Description</p>
-                                    <div class="text-muted small">
-                                         @ev.District?.Name |  @ev.CreatedAt.ToString("g")
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
+        <div class="col-lg-4">
+            <div class="quick-links justify-content-lg-end">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-ca-light">Головна</a>
+                <a asp-controller="Home" asp-action="EventMap" class="btn btn-ca-outline">Мапа подій</a>
+                @if (User.Identity?.IsAuthenticated == true && User.IsInRole("moderator"))
+                {
+                <a asp-action="Create" class="btn btn-ca-primary">Створити подію</a>
+                }
             </div>
-        }
-
-        <div class="row">
-            @foreach (var ev in otherEvents)
-            {
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card card-ca h-100 hov-card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <small>@ev.Category</small>
-                            @if (ev.Severity == CityAlert.Models.SeverityLevel.Warning)
-                            {
-                                <span class="badge bg-warning text-dark">Увага</span>
-                            }
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">@ev.Title</h5>
-                            <p class="card-text text-truncate-3">@ev.Description</p>
-                        </div>
-                        <div class="card-footer bg-transparent border-0 pb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="badge rounded-pill bg-light text-dark border">
-                                    @ev.District?.Name
-                                </span>
-                                <small class="text-muted">@ev.CreatedAt.ToString("dd.MM")</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
         </div>
-    }
+    </div>
 </div>
 
-<style>
-    .text-truncate-3 {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
+@if (!Model.Any())
+{
+<div class="card-ca empty-state">Наразі активних подій немає.</div>
+}
+else
+{
+@if (criticalEvents.Any())
+{
+<div class="section-head mt-1">
+    <div>
+        <h2 class="page-header-ca" style="font-size:1.8rem;">Термінові повідомлення</h2>
+        <p class="page-subtitle">Події, які потребують першочергової уваги.</p>
+    </div>
+</div>
 
-    .hov-card {
-        transition: transform 0.2s;
+<div class="row g-4 mb-4">
+    @foreach (var ev in criticalEvents)
+    {
+    <div class="col-12">
+        <div class="card-ca event-card critical-card">
+            <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+                <div>
+                    <h4 class="fw-bold mb-2">@ev.Title</h4>
+                    <div class="event-meta mt-0">
+                        <span class="badge-soft badge-soft-red">Критично</span>
+                        <span class="badge-soft badge-soft-dark">@ev.District?.Name</span>
+                        <span class="badge-soft badge-soft-blue">@ev.Category</span>
+                        <span class="badge-soft badge-soft-green">@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</span>
+                    </div>
+                </div>
+                <div class="text-end footer-note">Створено: @ev.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
+            </div>
+            <p class="event-description mt-3 mb-0">@ev.Description</p>
+        </div>
+    </div>
     }
+</div>
+}
 
-        .hov-card:hover {
-            transform: translateY(-5px);
-        }
-</style>
+<div class="section-head">
+    <div>
+        <h2 class="page-header-ca" style="font-size:1.8rem;">Усі інші активні події</h2>
+        <p class="page-subtitle">Оголошення з інформаційним та попереджувальним рівнем важливості.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    @foreach (var ev in normalEvents)
+    {
+    <div class="col-md-6 col-xl-4">
+        <div class="card-ca event-card">
+            <div class="d-flex justify-content-between align-items-start gap-3">
+                <h5 class="mb-0 fw-bold">@ev.Title</h5>
+                @if (ev.Severity == CityAlert.Models.SeverityLevel.Warning)
+                {
+                <span class="badge-soft badge-soft-yellow">Увага</span>
+                }
+                else
+                {
+                <span class="badge-soft badge-soft-blue">Інфо</span>
+                }
+            </div>
+            <p class="event-description text-clamp-3 mt-3 mb-0">@ev.Description</p>
+            <div class="event-meta">
+                <span class="badge-soft badge-soft-blue">@ev.Category</span>
+                <span class="badge-soft badge-soft-dark">@ev.District?.Name</span>
+                <span class="badge-soft badge-soft-green">@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</span>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+}

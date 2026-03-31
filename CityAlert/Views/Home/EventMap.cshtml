@@ -1,5 +1,49 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<CityAlert.Models.Event>
 @{
+    ViewData["Title"] = "Мапа подій";
 }
+
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="page-header-ca">Мапа подій за районами</h1>
+            <p class="page-subtitle">Спрощене відображення активних подій по районах міста.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="quick-links justify-content-lg-end">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-ca-light">Головна</a>
+                <a asp-controller="Events" asp-action="Index" class="btn btn-ca-outline">Події</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    @if (Model.Any())
+    {
+        @foreach (var group in Model.GroupBy(x => x.District?.Name).OrderBy(x => x.Key))
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card-ca h-100">
+                    <div class="card-header">@group.Key</div>
+                    <div class="card-body">
+                        @foreach (var ev in group)
+                        {
+                            <div class="info-chip mb-3">
+                                <div class="fw-bold">@ev.Title</div>
+                                <div class="footer-note mt-1">@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</div>
+                                <div class="footer-note">@ev.Description</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="card-ca empty-state">Активних подій для мапи поки немає.</div>
+        </div>
+    }
+</div>
