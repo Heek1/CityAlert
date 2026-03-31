@@ -1,8 +1,97 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<CityAlert.Models.Event>
+@{
+    ViewData["Title"] = "Головна";
+    var criticalCount = Model.Count(x => x.Severity == CityAlert.Models.SeverityLevel.Critical);
+    var warningCount = Model.Count(x => x.Severity == CityAlert.Models.SeverityLevel.Warning);
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <h1 class="page-header-ca">Міські події та сповіщення в одному місці</h1>
+            <p class="page-subtitle">
+                CityAlert допомагає швидко переглядати актуальні події, відстежувати важливі оголошення по районах міста
+                та оперативно створювати нові сповіщення для мешканців.
+            </p>
+            <div class="quick-links mt-4">
+                <a asp-controller="Events" asp-action="Index" class="btn btn-ca-primary">Перейти до подій</a>
+                <a asp-controller="Home" asp-action="EventMap" class="btn btn-ca-light">Відкрити мапу подій</a>
+                @if (User.Identity?.IsAuthenticated == true && User.IsInRole("moderator"))
+                {
+                    <a asp-controller="Events" asp-action="Create" class="btn btn-ca-outline">Створити подію</a>
+                    <a asp-controller="Home" asp-action="AdminPanel" class="btn btn-ca-light">Адмін панель</a>
+                }
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="metric-card card-ca">
+                        <div class="metric-label">Активні події</div>
+                        <div class="metric-value">@Model.Count()</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="metric-card card-ca">
+                        <div class="metric-label">Критичні</div>
+                        <div class="metric-value text-danger">@criticalCount</div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="metric-card card-ca">
+                        <div class="metric-label">Події з рівнем "Увага"</div>
+                        <div class="metric-value text-warning">@warningCount</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="section-head">
+    <div>
+        <h2 class="page-header-ca" style="font-size:2rem;">Останні активні події</h2>
+        <p class="page-subtitle">Короткий список повідомлень, які зараз відображаються у стрічці.</p>
+    </div>
+    <a asp-controller="Events" asp-action="Index" class="btn btn-ca-light">Усі події</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card-ca empty-state">
+        Активних подій ще немає. Після додавання нових сповіщень вони з’являться тут.
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var ev in Model)
+        {
+            <div class="col-md-6 col-xl-4">
+                <div class="card-ca event-card @(ev.Severity == CityAlert.Models.SeverityLevel.Critical ? "critical-card" : string.Empty)">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <h5 class="mb-0 fw-bold">@ev.Title</h5>
+                        @if (ev.Severity == CityAlert.Models.SeverityLevel.Critical)
+                        {
+                            <span class="badge-soft badge-soft-red">Критично</span>
+                        }
+                        else if (ev.Severity == CityAlert.Models.SeverityLevel.Warning)
+                        {
+                            <span class="badge-soft badge-soft-yellow">Увага</span>
+                        }
+                        else
+                        {
+                            <span class="badge-soft badge-soft-blue">Інфо</span>
+                        }
+                    </div>
+                    <p class="event-description text-clamp-3 mt-3 mb-0">@ev.Description</p>
+                    <div class="event-meta">
+                        <span class="badge-soft badge-soft-blue">@ev.Category</span>
+                        <span class="badge-soft badge-soft-dark">@ev.District?.Name</span>
+                        <span class="badge-soft badge-soft-green">@ev.CreatedAt.ToString("dd.MM.yyyy HH:mm")</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
