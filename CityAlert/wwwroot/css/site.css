@@ -26,7 +26,7 @@ body {
     color: var(--ca-text-dark);
 }
 
-/* Navbar */
+ Navbar 
 .navbar-ca {
     background: linear-gradient(90deg, var(--ca-white) 0%, var(--ca-blue) 100%);
     box-shadow: 0 2px 12px rgba(0, 87, 184, 0.15);
@@ -65,7 +65,7 @@ body {
         filter: none;
     }
 
-    /* Right-side nav (on the blue part) stays white */
+     Right-side nav (on the blue part) stays white 
     .navbar-ca .navbar-nav.ms-auto .nav-link {
         color: rgba(255, 255, 255, 0.9) !important;
     }
@@ -74,14 +74,14 @@ body {
             color: var(--ca-white) !important;
         }
 
-    /* Auth badge in navbar */
+     Auth badge in navbar 
     .navbar-ca .nav-user {
         color: var(--ca-white);
         font-size: 0.85rem;
         opacity: 0.9;
     }
 
-/* Cards */
+ Cards 
 .card-ca {
     border: none;
     border-radius: 12px;
@@ -96,7 +96,7 @@ body {
         font-weight: 600;
     }
 
-/* Buttons */
+ Buttons 
 .btn-ca-primary {
     background: var(--ca-blue);
     color: var(--ca-white);
@@ -147,3 +147,4 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
