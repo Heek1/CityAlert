@@ -97,6 +97,6 @@ namespace CityAlert.Controllers
             await _cache.RemoveAsync(CacheKey);
 
             return RedirectToAction(nameof(Index));
-        }
+        } 
     }
 }
