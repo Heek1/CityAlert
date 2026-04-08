@@ -3,6 +3,8 @@
     public class AdminPanelViewModel
     {
         public int TotalActiveEvents { get; set; }
+        public int TotalSubscriptions { get; set; }
+        public int UniqueSubscribers { get; set; }
         public List<DistrictSubscriptionCount> SubscriptionsByDistrict { get; set; } = new();
         public List<Event> AllEvents { get; set; } = new();
     }

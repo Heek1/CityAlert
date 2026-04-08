@@ -1,0 +1,89 @@
+@model CityAlert.Models.ResidentSubscriptionsViewModel
+@{
+    ViewData["Title"] = "Мої підписки";
+}
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">@successMessage</div>
+}
+
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="page-header-ca">Керування підписками</h1>
+            <p class="page-subtitle">Обирай райони, для яких хочеш отримувати персональні сповіщення про події.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="quick-links justify-content-lg-end">
+                <a asp-controller="Events" asp-action="Index" class="btn btn-ca-light">Події</a>
+                <a asp-controller="Home" asp-action="EventMap" class="btn btn-ca-outline">Мапа подій</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6 col-xl-4">
+        <div class="metric-card card-ca h-100">
+            <div class="metric-label">Активних підписок</div>
+            <div class="metric-value">@Model.TotalSubscriptions</div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4">
+        <div class="metric-card card-ca h-100">
+            <div class="metric-label">Доступних районів</div>
+            <div class="metric-value">@Model.Districts.Count</div>
+        </div>
+    </div>
+    <div class="col-md-12 col-xl-4">
+        <div class="card-ca h-100 d-flex align-items-center justify-content-center px-4 text-center">
+            <div class="footer-note">Тут можна швидко підписуватись і скасовувати підписки без переходу в інші розділи.</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    @foreach (var district in Model.Districts)
+    {
+        <div class="col-md-6 col-xl-4">
+            <div class="card-ca event-card h-100">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">@district.DistrictName</h5>
+                        <div class="footer-note">Підписників: @district.SubscriberCount</div>
+                    </div>
+                    @if (district.IsSubscribed)
+                    {
+                        <span class="badge-soft badge-soft-green">Підписка активна</span>
+                    }
+                    else
+                    {
+                        <span class="badge-soft badge-soft-dark">Не підписано</span>
+                    }
+                </div>
+
+                <p class="event-description mb-4">Після активації підписки ти зможеш швидше відстежувати події саме для цього району.</p>
+
+                @if (district.IsSubscribed)
+                {
+                    <form asp-action="UnsubscribeByDistrict" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="districtId" value="@district.DistrictId" />
+                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                        <button type="submit" class="btn btn-ca-danger w-100">Скасувати підписку</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="Subscribe" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="districtId" value="@district.DistrictId" />
+                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                        <button type="submit" class="btn btn-ca-primary w-100">Підписатися</button>
+                    </form>
+                }
+            </div>
+        </div>
+    }
+</div>

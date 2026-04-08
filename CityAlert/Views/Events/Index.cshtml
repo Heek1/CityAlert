@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<CityAlert.Models.Event>
 @{
-ViewData["Title"] = "Події";
-var criticalEvents = Model.Where(e => e.Severity == CityAlert.Models.SeverityLevel.Critical).ToList();
-var normalEvents = Model.Where(e => e.Severity != CityAlert.Models.SeverityLevel.Critical).ToList();
+    ViewData["Title"] = "Події";
+    var criticalEvents = Model.Where(e => e.Severity == CityAlert.Models.SeverityLevel.Critical).ToList();
+    var normalEvents = Model.Where(e => e.Severity != CityAlert.Models.SeverityLevel.Critical).ToList();
+    var subscribedDistrictIds = ViewBag.SubscribedDistrictIds as List<int> ?? new List<int>();
+    var returnUrl = Context.Request.Path + Context.Request.QueryString.ToString();
 }
 
 @if (TempData["SuccessMessage"] is string successMessage)
 {
-<div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">@successMessage</div>
+    <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">@successMessage</div>
 }
 
 <div class="hero-card mb-4">
@@ -22,9 +24,14 @@ var normalEvents = Model.Where(e => e.Severity != CityAlert.Models.SeverityLevel
             <div class="quick-links justify-content-lg-end">
                 <a asp-controller="Home" asp-action="Index" class="btn btn-ca-light">Головна</a>
                 <a asp-controller="Home" asp-action="EventMap" class="btn btn-ca-outline">Мапа подій</a>
+                @if (User.Identity?.IsAuthenticated == true && !User.IsInRole("moderator"))
+                {
+                    <a asp-controller="Subscriptions" asp-action="Index" class="btn btn-ca-outline">Мої підписки</a>
+                }
                 @if (User.Identity?.IsAuthenticated == true && User.IsInRole("moderator"))
                 {
-                <a asp-action="Create" class="btn btn-ca-primary">Створити подію</a>
+                    <a asp-action="Create" class="btn btn-ca-primary">Створити подію</a>
+                    <a asp-controller="Subscriptions" asp-action="Index" class="btn btn-ca-outline">Керування підписками</a>
                 }
             </div>
         </div>
@@ -33,74 +40,120 @@ var normalEvents = Model.Where(e => e.Severity != CityAlert.Models.SeverityLevel
 
 @if (!Model.Any())
 {
-<div class="card-ca empty-state">Наразі активних подій немає.</div>
+    <div class="card-ca empty-state">Наразі активних подій немає.</div>
 }
 else
 {
-@if (criticalEvents.Any())
-{
-<div class="section-head mt-1">
-    <div>
-        <h2 class="page-header-ca" style="font-size:1.8rem;">Термінові повідомлення</h2>
-        <p class="page-subtitle">Події, які потребують першочергової уваги.</p>
-    </div>
-</div>
-
-<div class="row g-4 mb-4">
-    @foreach (var ev in criticalEvents)
+    if (criticalEvents.Any())
     {
-    <div class="col-12">
-        <div class="card-ca event-card critical-card">
-            <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
-                <div>
-                    <h4 class="fw-bold mb-2">@ev.Title</h4>
-                    <div class="event-meta mt-0">
-                        <span class="badge-soft badge-soft-red">Критично</span>
-                        <span class="badge-soft badge-soft-dark">@ev.District?.Name</span>
-                        <span class="badge-soft badge-soft-blue">@ev.Category</span>
-                        <span class="badge-soft badge-soft-green">@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</span>
+        <div class="section-head mt-1">
+            <div>
+                <h2 class="page-header-ca" style="font-size:1.8rem;">Термінові повідомлення</h2>
+                <p class="page-subtitle">Події, які потребують першочергової уваги.</p>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            @foreach (var ev in criticalEvents)
+            {
+                <div class="col-12">
+                    <div class="card-ca event-card critical-card">
+                        <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+                            <div>
+                                <h4 class="fw-bold mb-2">@ev.Title</h4>
+                                <div class="event-meta mt-0">
+                                    <span class="badge-soft badge-soft-red">Критично</span>
+                                    <span class="badge-soft badge-soft-dark">@ev.District?.Name</span>
+                                    <span class="badge-soft badge-soft-blue">@ev.Category</span>
+                                    <span class="badge-soft badge-soft-green">@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</span>
+                                </div>
+                            </div>
+                            <div class="text-end footer-note">Створено: @ev.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                        </div>
+                        <p class="event-description mt-3 mb-3">@ev.Description</p>
+
+                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("resident"))
+                        {
+                            if (subscribedDistrictIds.Contains(ev.DistrictId))
+                            {
+                                <form asp-controller="Subscriptions" asp-action="UnsubscribeByDistrict" method="post" class="d-inline-block">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="districtId" value="@ev.DistrictId" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button type="submit" class="btn btn-sm btn-outline-light">Скасувати підписку на район</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Subscriptions" asp-action="Subscribe" method="post" class="d-inline-block">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="districtId" value="@ev.DistrictId" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button type="submit" class="btn btn-sm btn-ca-light">Підписатися на район</button>
+                                </form>
+                            }
+                        }
                     </div>
                 </div>
-                <div class="text-end footer-note">Створено: @ev.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
-            </div>
-            <p class="event-description mt-3 mb-0">@ev.Description</p>
+            }
+        </div>
+    }
+
+    <div class="section-head">
+        <div>
+            <h2 class="page-header-ca" style="font-size:1.8rem;">Усі інші активні події</h2>
+            <p class="page-subtitle">Оголошення з інформаційним та попереджувальним рівнем важливості.</p>
         </div>
     </div>
-    }
-</div>
-}
 
-<div class="section-head">
-    <div>
-        <h2 class="page-header-ca" style="font-size:1.8rem;">Усі інші активні події</h2>
-        <p class="page-subtitle">Оголошення з інформаційним та попереджувальним рівнем важливості.</p>
-    </div>
-</div>
+    <div class="row g-4">
+        @foreach (var ev in normalEvents)
+        {
+            <div class="col-md-6 col-xl-4">
+                <div class="card-ca event-card h-100">
+                    <div class="d-flex justify-content-between align-items-start gap-3">
+                        <h5 class="mb-0 fw-bold">@ev.Title</h5>
+                        @if (ev.Severity == CityAlert.Models.SeverityLevel.Warning)
+                        {
+                            <span class="badge-soft badge-soft-yellow">Увага</span>
+                        }
+                        else
+                        {
+                            <span class="badge-soft badge-soft-blue">Інфо</span>
+                        }
+                    </div>
+                    <p class="event-description text-clamp-3 mt-3 mb-0">@ev.Description</p>
+                    <div class="event-meta">
+                        <span class="badge-soft badge-soft-blue">@ev.Category</span>
+                        <span class="badge-soft badge-soft-dark">@ev.District?.Name</span>
+                        <span class="badge-soft badge-soft-green">@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</span>
+                    </div>
 
-<div class="row g-4">
-    @foreach (var ev in normalEvents)
-    {
-    <div class="col-md-6 col-xl-4">
-        <div class="card-ca event-card">
-            <div class="d-flex justify-content-between align-items-start gap-3">
-                <h5 class="mb-0 fw-bold">@ev.Title</h5>
-                @if (ev.Severity == CityAlert.Models.SeverityLevel.Warning)
-                {
-                <span class="badge-soft badge-soft-yellow">Увага</span>
-                }
-                else
-                {
-                <span class="badge-soft badge-soft-blue">Інфо</span>
-                }
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("resident"))
+                    {
+                        <div class="mt-3">
+                            @if (subscribedDistrictIds.Contains(ev.DistrictId))
+                            {
+                                <form asp-controller="Subscriptions" asp-action="UnsubscribeByDistrict" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="districtId" value="@ev.DistrictId" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button type="submit" class="btn btn-outline-danger w-100">Скасувати підписку на @ev.District?.Name</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Subscriptions" asp-action="Subscribe" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="districtId" value="@ev.DistrictId" />
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <button type="submit" class="btn btn-ca-primary w-100">Підписатися на @ev.District?.Name</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
             </div>
-            <p class="event-description text-clamp-3 mt-3 mb-0">@ev.Description</p>
-            <div class="event-meta">
-                <span class="badge-soft badge-soft-blue">@ev.Category</span>
-                <span class="badge-soft badge-soft-dark">@ev.District?.Name</span>
-                <span class="badge-soft badge-soft-green">@ev.StartDate.ToString("dd.MM.yyyy HH:mm")</span>
-            </div>
-        </div>
+        }
     </div>
-    }
-</div>
 }

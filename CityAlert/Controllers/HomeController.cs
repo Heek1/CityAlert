@@ -23,9 +23,10 @@ namespace CityAlert.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Events");
+            var eventsList = _context.Events.ToList();
+            return View(eventsList);
         }
-
+        
         public async Task<IActionResult> EventMap()
         {
             var events = await _context.Events

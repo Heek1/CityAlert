@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace CityAlert.Controllers
@@ -23,8 +24,17 @@ namespace CityAlert.Controllers
 
         public async Task<IActionResult> Index()
         {
-            string? cachedData = await _cache.GetStringAsync(CacheKey);
+            string? cachedData = null;
             List<Event> events;
+
+            try
+            {
+                cachedData = await _cache.GetStringAsync(CacheKey);
+            }
+            catch
+            {
+                cachedData = null;
+            }
 
             if (string.IsNullOrEmpty(cachedData))
             {
@@ -37,11 +47,31 @@ namespace CityAlert.Controllers
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(3)
                 };
 
-                await _cache.SetStringAsync(CacheKey, JsonSerializer.Serialize(events), options);
+                try
+                {
+                    await _cache.SetStringAsync(CacheKey, JsonSerializer.Serialize(events), options);
+                }
+                catch
+                {
+                }
             }
             else
             {
                 events = JsonSerializer.Deserialize<List<Event>>(cachedData)!;
+            }
+
+            if (User.Identity?.IsAuthenticated == true && User.IsInRole("resident"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    var subscribedDistrictIds = await _context.Subscriptions
+                        .Where(s => s.UserId == userId)
+                        .Select(s => s.DistrictId)
+                        .ToListAsync();
+
+                    ViewBag.SubscribedDistrictIds = subscribedDistrictIds;
+                }
             }
 
             return View(events);
@@ -69,7 +99,7 @@ namespace CityAlert.Controllers
                 _context.Events.Add(newEvent);
                 await _context.SaveChangesAsync();
 
-                await _cache.RemoveAsync(CacheKey);
+                try { await _cache.RemoveAsync(CacheKey); } catch { }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -115,7 +145,7 @@ namespace CityAlert.Controllers
                 ev.IsActive = updated.IsActive;
 
                 await _context.SaveChangesAsync();
-                await _cache.RemoveAsync(CacheKey);
+                try { await _cache.RemoveAsync(CacheKey); } catch { }
 
                 return RedirectToAction("AdminPanel", "Home");
             }
@@ -133,7 +163,7 @@ namespace CityAlert.Controllers
             {
                 _context.Events.Remove(ev);
                 await _context.SaveChangesAsync();
-                await _cache.RemoveAsync(CacheKey);
+                try { await _cache.RemoveAsync(CacheKey); } catch { }
             }
 
             return RedirectToAction("AdminPanel", "Home");
@@ -143,7 +173,7 @@ namespace CityAlert.Controllers
         [HttpPost]
         public async Task<IActionResult> ClearCache()
         {
-            await _cache.RemoveAsync(CacheKey);
+            try { await _cache.RemoveAsync(CacheKey); } catch { }
             return RedirectToAction("AdminPanel", "Home");
         }
     }

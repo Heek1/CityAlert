@@ -1,0 +1,112 @@
+@model CityAlert.Models.AdminSubscriptionsViewModel
+@{
+    ViewData["Title"] = "Керування підписками";
+}
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">@successMessage</div>
+}
+
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="page-header-ca">Керування підписками</h1>
+            <p class="page-subtitle">Перегляд усіх активних підписок користувачів та швидке адміністрування по районах.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="quick-links justify-content-lg-end">
+                <a asp-controller="Home" asp-action="AdminPanel" class="btn btn-ca-light">Адмін панель</a>
+                <a asp-controller="Events" asp-action="Create" class="btn btn-ca-outline">Створити подію</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="metric-card card-ca h-100">
+            <div class="metric-label">Усього підписок</div>
+            <div class="metric-value">@Model.TotalSubscriptions</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="metric-card card-ca h-100">
+            <div class="metric-label">Унікальних користувачів</div>
+            <div class="metric-value">@Model.UniqueUsersCount</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="metric-card card-ca h-100">
+            <div class="metric-label">Районів з підписками</div>
+            <div class="metric-value">@Model.SubscriptionsByDistrict.Count(x => x.Count > 0)</div>
+        </div>
+    </div>
+</div>
+
+<div class="card-ca mb-4">
+    <div class="section-head mb-3">
+        <div>
+            <h2 class="page-header-ca" style="font-size:1.5rem;">Статистика по районах</h2>
+            <p class="page-subtitle">Поточний розподіл кількості підписок.</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        @foreach (var district in Model.SubscriptionsByDistrict)
+        {
+            <div class="col-md-6 col-xl-4">
+                <div class="metric-card h-100">
+                    <div class="metric-label">@district.DistrictName</div>
+                    <div class="metric-value">@district.Count</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="card-ca">
+    <div class="section-head mb-3">
+        <div>
+            <h2 class="page-header-ca" style="font-size:1.5rem;">Усі підписки</h2>
+            <p class="page-subtitle">Адміністратор може переглянути всі записи та видалити непотрібні.</p>
+        </div>
+    </div>
+
+    @if (!Model.AllSubscriptions.Any())
+    {
+        <div class="empty-state">Поки що жодної підписки не створено.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Користувач</th>
+                        <th>User ID</th>
+                        <th>Район</th>
+                        <th class="text-end">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.AllSubscriptions)
+                    {
+                        <tr>
+                            <td><strong>@item.UserDisplayName</strong></td>
+                            <td class="text-muted small">@item.UserId</td>
+                            <td><span class="badge-soft badge-soft-dark">@item.DistrictName</span></td>
+                            <td class="text-end">
+                                <form asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('Видалити цю підписку?')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

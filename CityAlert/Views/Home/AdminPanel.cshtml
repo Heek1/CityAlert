@@ -4,34 +4,59 @@
 }
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="page-header-ca">Панель адміністратора</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h1 class="page-header-ca mb-0">Панель адміністратора</h1>
 
-        <form asp-controller="Events" asp-action="ClearCache" method="post" onsubmit="return confirm('Ви впевнені, що хочете очистити кеш стрічки подій?')">
-            <button type="submit" class="btn btn-ca-danger">
-                Очистити кеш Redis
-            </button>
-        </form>
+        <div class="d-flex gap-2 flex-wrap">
+            <a asp-controller="Subscriptions" asp-action="Manage" class="btn btn-ca-outline">Керування підписками</a>
+            <form asp-controller="Events" asp-action="ClearCache" method="post" onsubmit="return confirm('Ви впевнені, що хочете очистити кеш стрічки подій?')">
+                <button type="submit" class="btn btn-ca-danger">
+                    Очистити кеш Redis
+                </button>
+            </form>
+        </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row mb-5 g-4">
         <div class="col-md-4">
-            <div class="card card-ca text-center p-3">
+            <div class="card card-ca text-center p-3 h-100">
                 <div class="card-body">
                     <h5 class="text-muted">Активних подій</h5>
                     <h2 class="display-4 fw-bold" style="color: var(--ca-blue)">@Model.TotalActiveEvents</h2>
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-4">
+            <div class="card card-ca text-center p-3 h-100">
+                <div class="card-body">
+                    <h5 class="text-muted">Усього підписок</h5>
+                    <h2 class="display-4 fw-bold" style="color: var(--ca-red)">@Model.TotalSubscriptions</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-ca text-center p-3 h-100">
+                <div class="card-body">
+                    <h5 class="text-muted">Унікальних підписників</h5>
+                    <h2 class="display-4 fw-bold" style="color: var(--ca-yellow)">@Model.UniqueSubscribers</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5 g-4">
+        <div class="col-lg-12">
             <div class="card card-ca">
-                <div class="card-header">Підписки по районах</div>
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <span>Підписки по районах</span>
+                    <a asp-controller="Subscriptions" asp-action="Manage" class="btn btn-sm btn-light">Відкрити повне керування</a>
+                </div>
                 <div class="card-body">
                     <div class="row">
                         @foreach (var dist in Model.SubscriptionsByDistrict)
                         {
-                            <div class="col-6 col-sm-4 mb-2">
-                                <div class="p-2 border rounded bg-light">
+                            <div class="col-6 col-sm-4 col-xl-3 mb-2">
+                                <div class="p-2 border rounded bg-light h-100">
                                     <small class="d-block text-muted">@dist.DistrictName</small>
                                     <strong>@dist.Count підписників</strong>
                                 </div>

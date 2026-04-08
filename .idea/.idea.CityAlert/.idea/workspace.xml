@@ -9,8 +9,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42265c39-5bb1-4c84-991f-43b910388337" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CityAlert/Views/Events/Create.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CityAlert/Views/Events/Index.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CityAlert/ViewModel/AdminSubscriptionsViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CityAlert/ViewModel/ResidentSubscriptionsViewModel.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CityAlert/Views/Subscriptions/Index.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CityAlert/Views/Subscriptions/Manage.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.CityAlert/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CityAlert/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/Controllers/EventsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Controllers/EventsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Controllers/HomeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/Controllers/SubscriptionsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Controllers/SubscriptionsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/ViewModel/AdminPanelViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/ViewModel/AdminPanelViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/Views/Events/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Views/Events/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/Views/Home/AdminPanel.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Views/Home/AdminPanel.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/cityalert.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/cityalert.db-shm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/cityalert.db-wal" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,44 +37,48 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "leonstar228"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;leonstar228&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Heek1/CityAlert.git",
-    "accountId": "0b0cc675-b289-48f6-b4ab-579970735c96"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Heek1/CityAlert.git&quot;,
+    &quot;accountId&quot;: &quot;0b0cc675-b289-48f6-b4ab-579970735c96&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6,
-  "fromUser": false
-}]]></component>
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/CityAlert/Views/Subscriptions/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3BiWYeEx09VAiudNNeEXbeYw1Fx" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.CityAlert: http.executor": "Run",
-    ".NET Launch Settings Profile.CityAlert: https.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.CityAlert: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Launch Settings Profile.CityAlert: https.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.CityAlert: https">
     <configuration name="CityAlert: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/CityAlert/CityAlert.csproj" />
@@ -103,6 +121,8 @@
       <option name="presentableId" value="Default" />
       <updated>1774972421264</updated>
       <workItem from="1774972423691" duration="2687000" />
+      <workItem from="1775662862445" duration="1416000" />
+      <workItem from="1775664930045" duration="3602000" />
     </task>
     <servers />
   </component>
