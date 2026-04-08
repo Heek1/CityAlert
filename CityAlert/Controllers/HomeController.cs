@@ -53,10 +53,9 @@ namespace CityAlert.Controllers
         }
 
         [Authorize(Roles = "moderator")]
-        public async Task<IActionResult> CreateEvents()
+        public IActionResult CreateEvents()
         {
-            ViewBag.Districts = await _context.Districts.ToListAsync();
-            return View();
+            return RedirectToAction("Create", "Events");
         }
 
         [Authorize(Roles = "moderator")]
