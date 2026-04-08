@@ -82,8 +82,10 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="btn-group">
-                                        <a href="#" class="btn btn-sm btn-outline-primary">Редагувати</a>
-                                        <button type="button" class="btn btn-sm btn-outline-danger">Видалити</button>
+                                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@ev.Id" class="btn btn-sm btn-outline-primary">Редагувати</a>
+                                        <form asp-controller="Events" asp-action="Delete" asp-route-id="@ev.Id" method="post" onsubmit="return confirm('Видалити подію «@ev.Title»?')" style="display:inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

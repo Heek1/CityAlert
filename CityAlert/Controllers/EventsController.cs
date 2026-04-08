@@ -2,6 +2,7 @@
 using CityAlert.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
@@ -48,12 +49,18 @@ namespace CityAlert.Controllers
 
         [Authorize(Roles = "moderator")]
         [HttpGet]
-        public IActionResult Create() => View();
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Districts = new SelectList(await _context.Districts.ToListAsync(), "Id", "Name");
+            return View();
+        }
 
         [Authorize(Roles = "moderator")]
         [HttpPost]
         public async Task<IActionResult> Create(Event newEvent)
         {
+            ModelState.Remove(nameof(Event.District));
+
             if (ModelState.IsValid)
             {
                 newEvent.CreatedAt = DateTime.Now;
@@ -66,7 +73,70 @@ namespace CityAlert.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Districts = new SelectList(await _context.Districts.ToListAsync(), "Id", "Name", newEvent.DistrictId);
             return View(newEvent);
+        }
+
+        [Authorize(Roles = "moderator")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var ev = await _context.Events.FindAsync(id);
+            if (ev is null)
+                return NotFound();
+
+            ViewBag.Districts = new SelectList(await _context.Districts.ToListAsync(), "Id", "Name", ev.DistrictId);
+            return View(ev);
+        }
+
+        [Authorize(Roles = "moderator")]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, Event updated)
+        {
+            if (id != updated.Id)
+                return NotFound();
+
+            ModelState.Remove(nameof(Event.District));
+
+            if (ModelState.IsValid)
+            {
+                var ev = await _context.Events.FindAsync(id);
+                if (ev is null)
+                    return NotFound();
+
+                ev.Title = updated.Title;
+                ev.Description = updated.Description;
+                ev.Category = updated.Category;
+                ev.Severity = updated.Severity;
+                ev.DistrictId = updated.DistrictId;
+                ev.StartDate = updated.StartDate;
+                ev.EndDate = updated.EndDate;
+                ev.IsActive = updated.IsActive;
+
+                await _context.SaveChangesAsync();
+                await _cache.RemoveAsync(CacheKey);
+
+                return RedirectToAction("AdminPanel", "Home");
+            }
+
+            ViewBag.Districts = new SelectList(await _context.Districts.ToListAsync(), "Id", "Name", updated.DistrictId);
+            return View(updated);
+        }
+
+        [Authorize(Roles = "moderator")]
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var ev = await _context.Events.FindAsync(id);
+            if (ev is not null)
+            {
+                _context.Events.Remove(ev);
+                await _context.SaveChangesAsync();
+                await _cache.RemoveAsync(CacheKey);
+            }
+
+            return RedirectToAction("AdminPanel", "Home");
         }
 
         [Authorize(Roles = "moderator")]
