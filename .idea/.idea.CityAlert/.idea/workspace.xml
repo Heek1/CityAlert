@@ -9,22 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42265c39-5bb1-4c84-991f-43b910388337" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CityAlert/ViewModel/AdminSubscriptionsViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CityAlert/ViewModel/ResidentSubscriptionsViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CityAlert/Views/Subscriptions/Index.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CityAlert/Views/Subscriptions/Manage.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.CityAlert/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CityAlert/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/Controllers/EventsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Controllers/EventsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Controllers/HomeController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/Controllers/SubscriptionsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Controllers/SubscriptionsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/ViewModel/AdminPanelViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/ViewModel/AdminPanelViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/Views/Events/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Views/Events/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CityAlert/Views/Home/AdminPanel.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Views/Home/AdminPanel.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/Views/Shared/_Layout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/cityalert.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/cityalert.db-shm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/CityAlert/cityalert.db-wal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db-shm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CityAlert/cityalert.db-wal" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,8 +37,14 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/AdminPanel.cshtml" root0="FORCE_HIGHLIGHTING" root1="SKIP_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CityAlert/Views/Subscriptions/Index.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6,
   &quot;fromUser&quot;: false
@@ -122,16 +115,28 @@
       <updated>1774972421264</updated>
       <workItem from="1774972423691" duration="2687000" />
       <workItem from="1775662862445" duration="1416000" />
-      <workItem from="1775664930045" duration="3602000" />
+      <workItem from="1775664930045" duration="3936000" />
     </task>
+    <task id="LOCAL-00001" summary="Subscription">
+      <option name="closed" value="true" />
+      <created>1775668653081</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1775668653081</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Subscription" />
+    <option name="LAST_COMMIT_MESSAGE" value="Subscription" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
