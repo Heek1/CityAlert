@@ -8,6 +8,7 @@
         <h1 class="page-header-ca mb-0">Панель адміністратора</h1>
 
         <div class="d-flex gap-2 flex-wrap">
+            <a asp-controller="Districts" asp-action="Index" class="btn btn-ca-outline">Керування районами</a>
             <a asp-controller="Subscriptions" asp-action="Manage" class="btn btn-ca-outline">Керування підписками</a>
             <form asp-controller="Events" asp-action="ClearCache" method="post" onsubmit="return confirm('Ви впевнені, що хочете очистити кеш стрічки подій?')">
                 <button type="submit" class="btn btn-ca-danger">

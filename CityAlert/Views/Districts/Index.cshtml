@@ -1,0 +1,93 @@
+﻿@model List<CityAlert.Models.DistrictListItemViewModel>
+@{
+    ViewData["Title"] = "Керування районами";
+}
+
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">@successMessage</div>
+}
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">@errorMessage</div>
+}
+
+<div class="hero-card mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="page-header-ca">Керування районами</h1>
+            <p class="page-subtitle">Перегляд, створення та видалення районів міста.</p>
+        </div>
+        <div class="col-lg-4">
+            <div class="quick-links justify-content-lg-end">
+                <a asp-action="Create" class="btn btn-ca-primary">+ Створити район</a>
+                <a asp-controller="Home" asp-action="AdminPanel" class="btn btn-ca-light">Адмін панель</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="metric-card card-ca h-100">
+            <div class="metric-label">Усього районів</div>
+            <div class="metric-value">@Model.Count</div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="metric-card card-ca h-100">
+            <div class="metric-label">Районів з подіями</div>
+            <div class="metric-value">@Model.Count(d => d.EventsCount > 0)</div>
+        </div>
+    </div>
+</div>
+
+<div class="card-ca">
+    <div class="section-head mb-3">
+        <div>
+            <h2 class="page-header-ca" style="font-size:1.5rem;">Список районів</h2>
+            <p class="page-subtitle">При видаленні району всі пов'язані події та підписки буде видалено автоматично.</p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">Поки що жодного району не створено.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Назва</th>
+                        <th>Подій</th>
+                        <th>Підписок</th>
+                        <th class="text-end">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var district in Model)
+                    {
+                        var hasData = district.EventsCount > 0 || district.SubscriptionsCount > 0;
+                        var confirmMsg = hasData
+                            ? $"Район «{district.Name}» має {district.EventsCount} подій та {district.SubscriptionsCount} підписок. Все буде видалено. Продовжити?"
+                            : $"Видалити район «{district.Name}»?";
+                        <tr>
+                            <td><strong>@district.Name</strong></td>
+                            <td><span class="badge-soft badge-soft-blue">@district.EventsCount</span></td>
+                            <td><span class="badge-soft badge-soft-green">@district.SubscriptionsCount</span></td>
+                            <td class="text-end">
+                                <form asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('@Html.Raw(confirmMsg)')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@district.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Видалити</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
