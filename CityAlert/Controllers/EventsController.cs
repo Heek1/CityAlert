@@ -76,5 +76,27 @@ namespace CityAlert.Controllers
             await _cache.RemoveAsync(CacheKey);
             return RedirectToAction("AdminPanel", "Home");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id) { 
+            var eventToDelete = await _context.Events.FindAsync(id);
+            if (eventToDelete == null) return NotFound();
+            return View(eventToDelete);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "moderator")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var eventToDelete = await _context.Events.FindAsync(id);
+            if (eventToDelete == null) return NotFound();
+
+            _context.Events.Remove(eventToDelete);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync(CacheKey);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
